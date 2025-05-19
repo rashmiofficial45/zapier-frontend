@@ -120,13 +120,39 @@ function NavigationMenuViewport({
     </div>
   )
 }
+/**
+ *What’s wrong
+  NavigationMenuLink currently renders its own <a>:
+
+  <NavigationMenuPrimitive.Link ...>   // Radix wrapper
+    // Radix will inject an <a> because you did NOT pass asChild
+  </NavigationMenuPrimitive.Link>
+  When you later use it like
+
+
+  <LinkComponent href="/zaps">
+    <NavigationMenuLink>
+      Zaps
+    </NavigationMenuLink>
+  </LinkComponent>
+  Next <Link> adds another <a>.
+  So on the server you end up with:
+
+
+  <a class="radix‑generated"></a>
+  <a class="next‑generated"></a>
+  At runtime Radix drops the inner anchor → counts differ → hydration blows up.
+  Note: this will solve the error .
+  Make NavigationMenuLink always act as a “pass‑through” (asChild) and let whatever you nest supply the actual anchor.
+
+ */
 
 function NavigationMenuLink({
   className,
   ...props
 }: React.ComponentProps<typeof NavigationMenuPrimitive.Link>) {
   return (
-    <NavigationMenuPrimitive.Link
+    <NavigationMenuPrimitive.Link asChild
       data-slot="navigation-menu-link"
       className={cn(
         "data-[active=true]:focus:bg-accent data-[active=true]:hover:bg-accent data-[active=true]:bg-accent/50 data-[active=true]:text-accent-foreground hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus-visible:ring-ring/50 [&_svg:not([class*='text-'])]:text-muted-foreground flex flex-col gap-1 rounded-sm p-2 text-sm transition-all outline-none focus-visible:ring-[3px] focus-visible:outline-1 [&_svg:not([class*='size-'])]:size-4",
