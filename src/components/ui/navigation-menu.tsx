@@ -142,6 +142,8 @@ function NavigationMenuViewport({
   <a class="radix‑generated"></a>
   <a class="next‑generated"></a>
   At runtime Radix drops the inner anchor → counts differ → hydration blows up.
+
+  
   Note: this will solve the error .
   Make NavigationMenuLink always act as a “pass‑through” (asChild) and let whatever you nest supply the actual anchor.
 
