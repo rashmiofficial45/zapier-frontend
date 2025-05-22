@@ -58,7 +58,7 @@ const Navbar = () => {
                     </NavigationMenu>
 
                     <div className="flex items-center gap-4">
-                        <Link href="/auth/login">
+                        <Link href="/auth/signin">
                             <Button variant="outline">Log in</Button>
                         </Link>
                         <Link href="/auth/signup">
