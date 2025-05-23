@@ -11,6 +11,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { LogIn } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import axios from "axios";
 
 const formSchema = z.object({
     email: z.string().email({ message: "Please enter a valid email address." }),
@@ -30,9 +31,15 @@ export default function Login() {
         },
     });
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
+    async function onSubmit(values: z.infer<typeof formSchema>) {
         setIsLoading(true);
-
+        const res = await axios.post("http://localhost:3000/api/v1/user/signin",{
+            email:values.email,
+            password:values.password
+        })
+        const data = await res.data
+        console.log(data)
+        const token = localStorage.setItem("token", data.token)
         // Simulate authentication - in a real app, you would call your auth API here
         setTimeout(() => {
             setIsLoading(false);

@@ -12,18 +12,16 @@ import { User } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import Link from "next/link";
+import axios from "axios";
 
 const formSchema = z.object({
     name: z.string().min(2, {
         message: "Name must be at least 2 characters.",
     }),
     email: z.string().email({ message: "Please enter a valid email address." }),
-    password: z.string().min(8, {
+    password: z.string().min(6, {
         message: "Password must be at least 8 characters.",
     }),
-    terms: z.boolean().refine(val => val === true, {
-        message: "You must accept the terms and conditions.",
-    })
 });
 
 export default function SignUp() {
@@ -35,13 +33,19 @@ export default function SignUp() {
             name: "",
             email: "",
             password: "",
-            terms: false,
         },
     });
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
+    async function onSubmit(values: z.infer<typeof formSchema>) {
         setIsLoading(true);
-
+        // submitSignup()
+        const response = await axios.post("http://localhost:3000/api/v1/user/signup", {
+            username:values.name,
+            email:values.email,
+            password:values.password
+        })
+        const data = await response.data
+        console.log(data)
         // Simulate registration - in a real app, you would call your auth API here
         setTimeout(() => {
             setIsLoading(false);
@@ -50,7 +54,7 @@ export default function SignUp() {
                 description: "We've created your account for you.",
             });
 
-            router.push("/auth/login");
+            router.push("/auth/signin");
         }, 1000);
     }
 
@@ -123,33 +127,6 @@ export default function SignUp() {
                                             />
                                         </FormControl>
                                         <FormMessage />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name="terms"
-                                render={({ field }) => (
-                                    <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
-                                        <FormControl>
-                                            <Checkbox
-                                                checked={field.value}
-                                                onCheckedChange={field.onChange}
-                                            />
-                                        </FormControl>
-                                        <div className="space-y-1 leading-none">
-                                            <FormLabel>
-                                                I agree to the{" "}
-                                                <Link href="/terms" className="text-primary hover:text-primary/90">
-                                                    terms of service
-                                                </Link>
-                                                {" "}and{" "}
-                                                <Link href="/privacy" className="text-primary hover:text-primary/90">
-                                                    privacy policy
-                                                </Link>
-                                            </FormLabel>
-                                            <FormMessage />
-                                        </div>
                                     </FormItem>
                                 )}
                             />
