@@ -33,11 +33,12 @@ export default function Login() {
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         setIsLoading(true);
-        const res = await axios.post("http://localhost:3000/api/v1/user/signin",{
+        const res = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/user/signin`,{
             email:values.email,
             password:values.password
         })
         const data = await res.data
+        console.log(process.env.BACKEND_URL)
         console.log(data)
         const token = localStorage.setItem("token", data.token)
         // Simulate authentication - in a real app, you would call your auth API here

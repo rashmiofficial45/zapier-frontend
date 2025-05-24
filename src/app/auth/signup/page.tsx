@@ -38,7 +38,7 @@ export default function SignUp() {
     async function onSubmit(values: z.infer<typeof formSchema>) {
         setIsLoading(true);
         // submitSignup()
-        const response = await axios.post("http://localhost:3000/api/v1/user/signup", {
+        const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/user/signup`, {
             username:values.name,
             email:values.email,
             password:values.password

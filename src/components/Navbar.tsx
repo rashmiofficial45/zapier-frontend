@@ -14,7 +14,6 @@ import Link from "next/link";
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
-
     return (
         <header className="border-b bg-white p-4 sticky top-0 z-10">
             <div className="container flex items-center justify-between">
