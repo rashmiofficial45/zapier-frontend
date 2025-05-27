@@ -20,14 +20,24 @@
 //     onConfigChange: (fieldId: string, value: string) => void;
 //     onDone: () => void;
 // }
+// const fields = [{
+//     id: "212121",
+//     label: "Untitled Name",
+//     type: "text" | "select" | "email",
+//     placeholder: "not needed",
+//     options: {
+//         value: "demo",
+//         label: "demo"
+//     }
+// }]
 
 // const ConfigurationForm = ({
-//     // stepId,
-//     // stepType,
-//     // fields,
-//     // config,
-//     // onConfigChange,
-//     // onDone
+//     stepId,
+//     stepType,
+//     fields,
+//     config,
+//     onConfigChange,
+//     onDone
 // }) => {
 //     if (fields.length === 0) {
 //         return (

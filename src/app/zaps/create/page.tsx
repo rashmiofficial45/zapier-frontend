@@ -2,11 +2,15 @@
 import Footer from '@/components/Footer'
 import Navbar from '@/components/Navbar'
 import { Button } from '@/components/ui/button';
+import AppSelector from '@/components/zap/AppSelector';
+import EventSelector from '@/components/zap/EventSelector';
 import ZapCanvas from '@/components/zap/ZapCanvas';
+import { appActions, appTriggers, availableApps } from '@/lib/data';
 // Make sure ZapCanvas is exported as a React component that accepts a 'steps' prop.
 import { ChevronLeft, PlayIcon, SaveIcon, Zap } from 'lucide-react'
 import Link from 'next/link';
 import React, { useState } from 'react'
+import { toast } from 'sonner';
 
 export type Step = {
   id: string;
@@ -15,6 +19,13 @@ export type Step = {
   eventId: string;
   config: { [key: string]: string };
 };
+const step = {
+  id: "demoId",
+  // type: "trigger" | "action",
+  // triggerId: string;
+  // zapId: string;
+  // config: { [key: string]: string };
+};
 
 const CreateZap = () => {
   const [zapName, setZapName] = useState(`Untitled Zap`);
@@ -22,6 +33,114 @@ const CreateZap = () => {
   const [selecting, setSelecting] = useState<{ type: "trigger" | "action"; index: number } | null>(null);
   const [selectedApp, setSelectedApp] = useState<string | null>(null);
   const [configuring, setConfiguring] = useState<number | null>(null);
+
+  const handleAddTrigger = () => {
+    if (steps.length === 0 || !steps.some(step => step.type === "trigger")) {
+      setSelecting({ type: "trigger", index: 0 });
+      setSelectedApp(null);
+    } else {
+      toast("Cannot add another trigger", {
+        description: "A Zap can only have one trigger. You can edit the existing trigger instead.",
+      });
+    }
+  };
+
+  const handleAddAction = () => {
+    setSelecting({ type: "action", index: steps.length });
+    setSelectedApp(null);
+  };
+
+  const handleSelectApp = (appId: string) => {
+    setSelectedApp(appId);
+  };
+
+  const handleSelectEvent = (eventId: string) => {
+    if (!selecting || !selectedApp) return;
+
+    const newStep: Step = {
+      id: `step-${Date.now()}`,
+      type: selecting.type,
+      appId: selectedApp,
+      eventId: eventId,
+      config: {}
+    };
+
+    if (selecting.type === "trigger" && steps.some(step => step.type === "trigger")) {
+      // Replace the existing trigger
+      const newSteps = steps.filter(step => step.type !== "trigger");
+      setSteps([newStep, ...newSteps]);
+    } else if (selecting.type === "trigger") {
+      // Add as the first step
+      setSteps([newStep, ...steps.filter(step => step.type !== "trigger")]);
+    } else {
+      // Add action at the end
+      setSteps([...steps, newStep]);
+    }
+
+    // Immediately show configuration for the new step
+    setSelecting(null);
+    setSelectedApp(null);
+    setConfiguring(steps.length);
+
+    toast(
+      `${selecting.type === "trigger" ? "Trigger" : "Action"} added`,{
+              description: `Successfully added a new ${selecting.type === "trigger" ? "trigger" : "action"} to your Zap.`,
+    });
+  };
+
+  const handleConfigChange = (stepIndex: number, fieldId: string, value: string) => {
+    setSteps(currentSteps =>
+      currentSteps.map((step, index) =>
+        index === stepIndex
+          ? { ...step, config: { ...step.config, [fieldId]: value } }
+          : step
+      )
+    );
+  };
+
+  const handleConfigDone = () => {
+    setConfiguring(null);
+    toast(
+      "Configuration saved",{
+      description: "Your step configuration has been saved.",
+    });
+  };
+
+  const handleDeleteStep = (index: number) => {
+    setSteps(currentSteps => currentSteps.filter((_, i) => i !== index));
+    if (configuring === index) {
+      setConfiguring(null);
+    } else if (configuring !== null && configuring > index) {
+      setConfiguring(configuring - 1);
+    }
+
+    toast(
+      "Step deleted",{
+      description: "The step has been removed from your Zap.",
+    });
+  };
+
+  const handleSaveZap = () => {
+    toast(
+      "Zap saved",{
+      description: "Your Zap has been saved successfully!",
+    });
+  };
+
+  const handleEditStep = (index: number) => {
+    setConfiguring(index);
+  };
+
+  const getEvents = (appId: string, type: "trigger" | "action") => {
+    return type === "trigger"
+      ? appTriggers[appId as keyof typeof appTriggers] || []
+      : appActions[appId as keyof typeof appActions] || [];
+  };
+
+  const getAppName = (appId: string) => {
+    return availableApps.find(app => app.id === appId)?.name || "";
+  };
+
   return (
     <>
         <Navbar />
@@ -86,11 +205,11 @@ const CreateZap = () => {
             {selecting && !selectedApp && (
               <div className="mt-12">
                 <div className="bg-white rounded-xl shadow-lg border border-gray-200">
-                  {/* <AppSelector
+                  <AppSelector
                     apps={availableApps}
                     onSelectApp={handleSelectApp}
                     title={`Choose ${selecting.type === "trigger" ? "Trigger" : "Action"} App`}
-                  /> */}
+                  />
                 </div>
               </div>
             )}
@@ -99,12 +218,12 @@ const CreateZap = () => {
             {selecting && selectedApp && (
               <div className="mt-12">
                 <div className="bg-white rounded-xl shadow-lg border border-gray-200">
-                  {/* <EventSelector
+                  <EventSelector
                     events={getEvents(selectedApp, selecting.type)}
                     onSelectEvent={handleSelectEvent}
                     appName={getAppName(selectedApp)}
                     type={selecting.type}
-                  /> */}
+                  />
                 </div>
               </div>
             )}
