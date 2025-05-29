@@ -1,29 +1,12 @@
 // import { ConfigField } from "./ConfigurationForm";
 
 // Mock data for available apps
-export const availableApps = [
-  { id: "gmail", name: "Gmail", icon: "📧", category: "Email" },
-  { id: "slack", name: "Slack", icon: "💬", category: "Communication" },
-  { id: "dropbox", name: "Dropbox", icon: "📁", category: "Storage" },
-  { id: "sheets", name: "Google Sheets", icon: "📊", category: "Spreadsheets" },
-  { id: "calendar", name: "Google Calendar", icon: "📅", category: "Calendar" },
-  { id: "twitter", name: "Twitter", icon: "🐦", category: "Social Media" },
-  { id: "facebook", name: "Facebook", icon: "👍", category: "Social Media" },
-  { id: "trello", name: "Trello", icon: "📋", category: "Project Management" },
-];
-
-// Mock data for triggers and actions
-export const appTriggers = {
-  gmail: [
+export const availableTrigger = {
+  webhook: [
     {
-      id: "new_email",
-      name: "New Email",
-      description: "Triggers when a new email is received",
-    },
-    {
-      id: "new_labeled_email",
-      name: "New Labeled Email",
-      description: "Triggers when an email with a specific label is received",
+      id: "webhook",
+      name: "Webhook",
+      description: "Trigger when the webhook is hit",
     },
   ],
   slack: [
@@ -38,29 +21,57 @@ export const appTriggers = {
       description: "Triggers when you are mentioned in a channel",
     },
   ],
+  dropbox: [
+    {
+      id: "new_file",
+      name: "New File",
+      description: "Triggers when a new file is added to Dropbox",
+    },
+  ],
+  sheets: [
+    {
+      id: "new_row",
+      name: "New Row",
+      description: "Triggers when a new row is added in Sheets",
+    },
+  ],
+  // Add others like calendar, twitter, facebook, etc.
+};
+
+// Mock data for triggers and actions
+export const descTriggers = {
+  webhook: [
+    {
+      id: "webhook",
+      name: "give a predefined webhook",
+      description: "trigger when the webhook is hit",
+    },
+  ],
+  // slack: [
+  //   {
+  //     id: "new_message",
+  //     name: "New Message",
+  //     description: "Triggers when a new message is posted to a channel",
+  //   },
+  //   {
+  //     id: "new_mention",
+  //     name: "New Mention",
+  //     description: "Triggers when you are mentioned in a channel",
+  //   },
+  // ],
   // Add more app triggers as needed
 };
 
-export const appActions = {
-  gmail: [
+export const availableActions = {
+  email: [
     { id: "send_email", name: "Send Email", description: "Send a new email" },
-    {
-      id: "create_draft",
-      name: "Create Draft",
-      description: "Create a new draft email",
-    },
   ],
-  slack: [
+  solana: [
     {
-      id: "send_message",
-      name: "Send Message",
-      description: "Send a message to a channel",
-    },
-    {
-      id: "create_channel",
-      name: "Create Channel",
-      description: "Create a new channel",
-    },
+      id: "transfer_sol",
+      name: "Transfer Solana",
+      description: "Send solana to given address",
+    }
   ],
   // Add more app actions as needed
 };

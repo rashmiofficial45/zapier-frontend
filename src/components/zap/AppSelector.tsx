@@ -16,18 +16,22 @@ interface AppSelectorProps {
     title: string;
 }
 
-const AppSelector: React.FC<AppSelectorProps> = ({ apps, onSelectApp, title }) => {
+const AppSelector
+// : React.FC<AppSelectorProps>
+ = (
+    // { apps, onSelectApp, title }
+) => {
     const [searchTerm, setSearchTerm] = React.useState("");
 
-    const filteredApps = apps.filter(app =>
-        app.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        app.category.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    // const filteredApps = apps.filter(app =>
+    //     app.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    //     app.category.toLowerCase().includes(searchTerm.toLowerCase())
+    // );
 
     return (
         <Card className="bg-white shadow-lg border-0">
             <CardHeader className="pb-4">
-                <CardTitle className="text-xl font-semibold text-gray-900">{title}</CardTitle>
+                <CardTitle className="text-xl font-semibold text-gray-900">Title</CardTitle>
                 <div className="relative mt-4">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <Input
@@ -40,7 +44,7 @@ const AppSelector: React.FC<AppSelectorProps> = ({ apps, onSelectApp, title }) =
             </CardHeader>
             <CardContent>
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                    {filteredApps.map((app) => (
+                    {/* {filteredApps.map((app) => (
                         <button
                             key={app.id}
                             onClick={() => onSelectApp(app.id)}
@@ -52,7 +56,7 @@ const AppSelector: React.FC<AppSelectorProps> = ({ apps, onSelectApp, title }) =
                             <span className="text-sm font-medium text-gray-900 text-center leading-tight">{app.name}</span>
                             <span className="text-xs text-gray-500 mt-1">{app.category}</span>
                         </button>
-                    ))}
+                    ))} */}
                 </div>
             </CardContent>
         </Card>
