@@ -38,30 +38,6 @@ export const availableTrigger = {
   // Add others like calendar, twitter, facebook, etc.
 };
 
-// Mock data for triggers and actions
-export const descTriggers = {
-  webhook: [
-    {
-      id: "webhook",
-      name: "give a predefined webhook",
-      description: "trigger when the webhook is hit",
-    },
-  ],
-  // slack: [
-  //   {
-  //     id: "new_message",
-  //     name: "New Message",
-  //     description: "Triggers when a new message is posted to a channel",
-  //   },
-  //   {
-  //     id: "new_mention",
-  //     name: "New Mention",
-  //     description: "Triggers when you are mentioned in a channel",
-  //   },
-  // ],
-  // Add more app triggers as needed
-};
-
 export const availableActions = {
   email: [
     { id: "send_email", name: "Send Email", description: "Send a new email" },

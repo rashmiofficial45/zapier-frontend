@@ -6,8 +6,7 @@ import { Search } from "lucide-react";
 type App = {
     id: string;
     name: string;
-    icon: string;
-    category: string;
+    description: string;
 };
 
 interface AppSelectorProps {
@@ -17,16 +16,15 @@ interface AppSelectorProps {
 }
 
 const AppSelector
-// : React.FC<AppSelectorProps>
+: React.FC<AppSelectorProps>
  = (
-    // { apps, onSelectApp, title }
+    { apps, onSelectApp, title }
 ) => {
     const [searchTerm, setSearchTerm] = React.useState("");
 
-    // const filteredApps = apps.filter(app =>
-    //     app.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    //     app.category.toLowerCase().includes(searchTerm.toLowerCase())
-    // );
+    const filteredApps = apps.filter(app =>
+        app.name.toLowerCase().includes(searchTerm.toLowerCase())
+        );
 
     return (
         <Card className="bg-white shadow-lg border-0">
@@ -44,19 +42,19 @@ const AppSelector
             </CardHeader>
             <CardContent>
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                    {/* {filteredApps.map((app) => (
+                    {filteredApps.map((app) => (
                         <button
                             key={app.id}
                             onClick={() => onSelectApp(app.id)}
                             className="flex flex-col items-center p-4 rounded-lg border border-gray-200 hover:border-orange-300 hover:bg-orange-50 transition-all group cursor-pointer"
                         >
                             <div className="w-12 h-12 flex items-center justify-center text-2xl mb-3 group-hover:scale-110 transition-transform">
-                                {app.icon}
+                            ◉
                             </div>
                             <span className="text-sm font-medium text-gray-900 text-center leading-tight">{app.name}</span>
-                            <span className="text-xs text-gray-500 mt-1">{app.category}</span>
+                            <span className="text-xs text-gray-500 mt-1">Trigger</span>
                         </button>
-                    ))} */}
+                    ))}
                 </div>
             </CardContent>
         </Card>

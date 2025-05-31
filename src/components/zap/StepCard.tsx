@@ -7,13 +7,15 @@ import {
     Trash2,
     Settings,
 } from "lucide-react";
+import ConfigurationForm from "./ConfigurationForm";
 // import ConfigurationForm, { ConfigField } from "./ConfigurationForm";
 
 type App = {
     id: string;
     name: string;
-    icon: string; // You might replace this with a JSX.Element or dynamic import
-    category: string;
+    description:string;
+    icon?: string; // You might replace this with a JSX.Element or dynamic import
+    category?: string;
 };
 
 interface Step {
@@ -48,7 +50,6 @@ const StepCard: React.FC<StepCardProps> = ({
     index,
     step,
     isConfiguring,
-    // configFields,
     availableApps,
     eventName,
     eventDescription,
@@ -189,14 +190,14 @@ const StepCard: React.FC<StepCardProps> = ({
                                     Configure {step.type === "trigger" ? "Trigger" : "Action"}
                                 </h4>
 
-                                {/* <ConfigurationForm
+                                <ConfigurationForm
                                         stepId={step.id}
                                         stepType={step.type}
-                                        fields={configFields}
+                                        // fields={configFields}
                                         config={step.config}
                                         onConfigChange={onConfigChange}
                                         onDone={onConfigDone}
-                                /> */}
+                                />
                             </div>
                         </div>
                     </CardContent>

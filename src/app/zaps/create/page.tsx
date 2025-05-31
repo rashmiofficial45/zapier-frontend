@@ -166,9 +166,9 @@ const CreateZap = () => {
               <div className="mt-12">
                 <div className="bg-white rounded-xl shadow-lg border border-gray-200">
                   <AppSelector
-                    // apps={availableApps}
-                    // onSelectApp={handleSelectApp}
-                    // title={`Choose ${selecting.type === "trigger" ? "Trigger" : "Action"} App`}
+                    apps={Object.values(availableTrigger).flat()}
+                    onSelectApp={handleSelectApp}
+                    title={`Choose ${selecting.type === "trigger" ? "Trigger" : "Action"} App`}
                   />
                 </div>
               </div>

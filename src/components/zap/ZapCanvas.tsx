@@ -20,7 +20,6 @@ interface ZapCanvasProps {
     onAddAction: () => void;
     onConfigChange: (stepIndex: number, fieldId: string, value: string) => void;
     onConfigDone: () => void;
-    // Optional: add onEditStep, onDeleteStep if needed
 }
 
 const ZapCanvas: React.FC<ZapCanvasProps> = ({
@@ -69,16 +68,13 @@ const ZapCanvas: React.FC<ZapCanvasProps> = ({
                             index={index}
                             step={step}
                             isConfiguring={configuring === index}
-                            // TODO: Pass actual config fields based on step.eventId
-                            configFields={[]}
                             // TODO: Provide app name, event description functions as needed
                             eventName={step.eventId}
                             eventDescription=""
-                            onConfigChange={(fieldId, value) =>
-                                onConfigChange(index, fieldId, value)
-                            }
-                            onConfigDone={onConfigDone}
-                        // Optionally add: onEdit, onDeleteStep, etc.
+                            onConfigChange={(fieldId, value) => onConfigChange(index, fieldId, value)}
+                            onConfigDone={onConfigDone} availableApps={[]} onEdit={function (): void {
+                                throw new Error("Function not implemented.");
+                            } }                        // Optionally add: onEdit, onDeleteStep, etc.
                         />
 
                         {/* Connection line between steps */}
