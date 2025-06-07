@@ -1,50 +1,45 @@
 import React, { useState } from "react";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import {
-    ChevronDown,
-    ChevronUp,
-    Trash2,
-    Settings,
-} from "lucide-react";
+import { ChevronDown, ChevronUp, Trash2, Settings } from "lucide-react";
 import ConfigurationForm from "./ConfigurationForm";
-// import ConfigurationForm, { ConfigField } from "./ConfigurationForm";
 
+/**
+ * Represents an app a step belongs to (e.g., Slack, Gmail).
+ */
 type App = {
     id: string;
     name: string;
-    description:string;
-    icon?: string; // You might replace this with a JSX.Element or dynamic import
+    description: string;
+    icon?: string;
     category?: string;
 };
 
-interface Step {
+/**
+ * Represents a single step in a workflow.
+ */
+type Step = {
     id: string;
     type: "trigger" | "action";
     appId: string;
     eventId: string;
-    config: { [key: string]: string };
-}
+    config: { [key: string]: string }; // Stores field values
+};
 
-// interface ConfigField {
-//   id: string;
-//   label: string;
-//   placeholder?: string;
-// }
-
-interface StepCardProps {
-    index: number;
-    step: Step;
-    isConfiguring: boolean;
-    // configFields: ConfigField[];
-    availableApps: App[];
+/**
+ * Props expected by StepCard component.
+ */
+type StepCardProps = {
+    index: number;                    // Position in the workflow
+    step: Step;                       // Step object
+    isConfiguring: boolean;          // Whether to show config form
+    availableApps: App[];            // All apps available for lookup
     eventName: string;
     eventDescription: string;
-    onEdit: () => void;
-    onConfigChange: (fieldId: string, value: string) => void;
+    onConfigChange: (id: string, value: string) => void;
     onConfigDone: () => void;
     onDelete?: () => void;
-}
+};
 
 const StepCard: React.FC<StepCardProps> = ({
     index,
@@ -53,7 +48,6 @@ const StepCard: React.FC<StepCardProps> = ({
     availableApps,
     eventName,
     eventDescription,
-    onEdit,
     onConfigChange,
     onConfigDone,
     onDelete,
@@ -65,20 +59,22 @@ const StepCard: React.FC<StepCardProps> = ({
 
     return (
         <div className="relative">
-            {/* Step number indicator */}
-            <div className="absolute -left-4 top-4 w-7 h-7 bg-white border-2 border-gray-300 rounded-full flex items-center justify-center text-xs font-semibold text-gray-600 z-10 shadow-sm">
+            {/* Step Number Bubble */}
+            <div className="absolute -left-4 top-4 w-7 h-7 bg-white border-2 border-gray-300 rounded-full flex items-center justify-center text-xs font-semibold text-gray-600 shadow-sm z-10">
                 {index + 1}
             </div>
 
+            {/* Main Card */}
             <Card
                 className={`ml-6 shadow-sm border transition-all hover:shadow-md cursor-pointer ${step.type === "trigger"
-                    ? "border-orange-200 bg-gradient-to-r from-orange-50/50 to-orange-50/30"
-                    : "border-blue-200 bg-gradient-to-r from-blue-50/50 to-blue-50/30"
+                        ? "border-orange-200 bg-orange-50"
+                        : "border-blue-200 bg-blue-50"
                     } ${isConfiguring ? "ring-2 ring-orange-300 shadow-lg" : ""}`}
-                onClick={onEdit}
             >
+                {/* Card Header with App & Controls */}
                 <CardHeader className="pb-3 px-4 pt-4">
                     <div className="flex items-center justify-between">
+                        {/* App Info */}
                         <div className="flex items-center space-x-3">
                             <div
                                 className={`w-8 h-8 rounded-lg flex items-center justify-center text-lg shadow-sm ${step.type === "trigger" ? "bg-orange-100" : "bg-blue-100"
@@ -89,9 +85,7 @@ const StepCard: React.FC<StepCardProps> = ({
                             <div className="min-w-0 flex-1">
                                 <div className="flex items-center space-x-2">
                                     <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">
-                                        {step.type === "trigger"
-                                            ? "Trigger"
-                                            : `Action ${index}`}
+                                        {step.type === "trigger" ? "Trigger" : `Action ${index}`}
                                     </span>
                                     {isConfigured && (
                                         <div className="w-1.5 h-1.5 bg-green-500 rounded-full" />
@@ -117,16 +111,11 @@ const StepCard: React.FC<StepCardProps> = ({
                                 onClick={() => setIsExpanded(!isExpanded)}
                                 className="h-7 w-7 p-0 hover:bg-gray-100 rounded-md"
                             >
-                                {isExpanded ? (
-                                    <ChevronUp className="h-3 w-3" />
-                                ) : (
-                                    <ChevronDown className="h-3 w-3" />
-                                )}
+                                {isExpanded ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
                             </Button>
                             <Button
                                 variant="ghost"
                                 size="sm"
-                                onClick={onEdit}
                                 className="h-7 w-7 p-0 hover:bg-gray-100 rounded-md"
                             >
                                 <Settings className="h-3 w-3" />
@@ -145,29 +134,19 @@ const StepCard: React.FC<StepCardProps> = ({
                     </div>
                 </CardHeader>
 
-                {/* Expandable config summary */}
+                {/* Expand to show config summary */}
                 {isExpanded && (
-                    <CardContent
-                        className="px-4 pb-4 pt-0"
-                        onClick={(e) => e.stopPropagation()}
-                    >
+                    <CardContent className="px-4 pb-4 pt-0" onClick={(e) => e.stopPropagation()}>
                         <div className="border-t pt-3">
                             <p className="text-sm text-gray-600 mb-3">Step Configuration</p>
                             {isConfigured && (
                                 <div className="p-3 bg-gray-50 rounded-lg border">
-                                    <p className="text-xs font-medium text-gray-700 mb-2">
-                                        Config values:
-                                    </p>
+                                    <p className="text-xs font-medium text-gray-700 mb-2">Config values:</p>
                                     <div className="space-y-1">
                                         {Object.entries(step.config).map(([key, value]) => (
-                                            <div
-                                                key={key}
-                                                className="flex items-center text-xs space-x-2"
-                                            >
+                                            <div key={key} className="flex items-center text-xs space-x-2">
                                                 <span className="text-gray-500">{key}:</span>
-                                                <span className="font-medium text-gray-900 truncate">
-                                                    {value}
-                                                </span>
+                                                <span className="font-medium text-gray-900 truncate">{value}</span>
                                             </div>
                                         ))}
                                     </div>
@@ -177,12 +156,9 @@ const StepCard: React.FC<StepCardProps> = ({
                     </CardContent>
                 )}
 
-                {/* Configuration Panel */}
+                {/* Configuration Form Panel */}
                 {isConfiguring && (
-                    <CardContent
-                        className="px-4 pb-4 pt-0"
-                        onClick={(e) => e.stopPropagation()}
-                    >
+                    <CardContent className="px-4 pb-4 pt-0" onClick={(e) => e.stopPropagation()}>
                         <div className="border-t pt-4">
                             <div className="p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
                                 <h4 className="font-semibold text-gray-900 mb-4 flex items-center">
@@ -190,13 +166,12 @@ const StepCard: React.FC<StepCardProps> = ({
                                     Configure {step.type === "trigger" ? "Trigger" : "Action"}
                                 </h4>
 
+                                {/* ConfigurationForm uses simplified version */}
                                 <ConfigurationForm
-                                        stepId={step.id}
-                                        stepType={step.type}
-                                        // fields={configFields}
-                                        config={step.config}
-                                        onConfigChange={onConfigChange}
-                                        onDone={onConfigDone}
+                                    fields={[]} // You can pass real fields here
+                                    config={step.config}
+                                    onConfigChange={onConfigChange}
+                                    onDone={onConfigDone}
                                 />
                             </div>
                         </div>
